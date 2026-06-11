@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رفع استمارة التصريح الأمني</title>
+    <title>تحميل استمارة التصريح الأمني</title>
     <style>
         * {
             margin: 0;
@@ -23,9 +23,9 @@
 
         .container {
             background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 700px;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+            max-width: 650px;
             width: 100%;
             overflow: hidden;
         }
@@ -33,71 +33,100 @@
         .header {
             background: linear-gradient(135deg, #2e8b47 0%, #1a5f2a 100%);
             color: white;
-            padding: 25px;
+            padding: 35px 25px;
             text-align: center;
+            position: relative;
+        }
+
+        .header-icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
         }
 
         .header h1 {
-            font-size: 1.6rem;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
         }
 
         .header p {
             font-size: 0.95rem;
-            opacity: 0.9;
+            opacity: 0.85;
         }
 
         .content {
             padding: 30px;
         }
 
+        .alert-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-box .icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .alert-box .text {
+            color: #e65100;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         .instructions-box {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 22px;
             margin-bottom: 25px;
         }
 
         .instructions-box h2 {
             color: #1a5f2a;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1.15rem;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .instructions-box h2::before {
-            content: "📋";
-        }
-
         .instruction-item {
             background: white;
             border-right: 4px solid #2e8b47;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 0 8px 8px 0;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 0 10px 10px 0;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 12px;
             transition: all 0.3s ease;
         }
 
         .instruction-item:hover {
             background: #e8f5e9;
-            transform: translateX(-3px);
+            transform: translateX(-4px);
         }
 
         .instruction-item .icon {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .instruction-item .text {
             color: #333;
             font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+
+        .instruction-item .text strong {
+            color: #1a5f2a;
         }
 
         .instruction-item.highlight {
@@ -109,163 +138,76 @@
             background: #ffcdd2;
         }
 
-        .upload-area {
-            border: 3px dashed #2e8b47;
-            border-radius: 12px;
-            padding: 40px 20px;
+        .instruction-item.highlight .text strong {
+            color: #c62828;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196f3;
+            border-radius: 16px;
+            padding: 30px;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f1f8e9;
-            position: relative;
-        }
-
-        .upload-area:hover {
-            background: #e8f5e9;
-            border-color: #1a5f2a;
-            transform: scale(1.01);
-        }
-
-        .upload-area.dragover {
-            background: #c8e6c9;
-            border-color: #2e7d32;
-        }
-
-        .upload-area .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .upload-area h3 {
-            color: #1a5f2a;
-            margin-bottom: 8px;
-        }
-
-        .upload-area p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .upload-area input[type="file"] {
-            display: none;
-        }
-
-        .file-info {
-            display: none;
-            background: #e8f5e9;
-            border: 2px solid #2e8b47;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .file-info.show {
-            display: flex;
-        }
-
-        .file-info .file-icon {
-            font-size: 2rem;
-        }
-
-        .file-info .file-details {
-            flex: 1;
-            text-align: right;
-        }
-
-        .file-info .file-name {
-            font-weight: bold;
-            color: #1a5f2a;
-        }
-
-        .file-info .file-size {
-            color: #666;
-            font-size: 0.85rem;
-        }
-
-        .file-info .remove-btn {
-            background: #c62828;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: background 0.3s;
-        }
-
-        .file-info .remove-btn:hover {
-            background: #b71c1c;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            background: linear-gradient(135deg, #2e8b47 0%, #1a5f2a 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(46, 139, 71, 0.4);
-        }
-
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .success-message {
-            display: none;
-            background: #e8f5e9;
-            border: 2px solid #2e8b47;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            color: #1a5f2a;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .warning-box {
-            background: #fff3e0;
-            border: 2px solid #ff9800;
-            border-radius: 10px;
-            padding: 15px;
             margin-bottom: 20px;
-            display: flex;
+        }
+
+        .download-section h3 {
+            color: #1565c0;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .download-section .sub-text {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            color: #e65100;
+            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            color: white;
+            padding: 16px 45px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.15rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.35);
+            border: none;
+            cursor: pointer;
         }
 
-        .warning-box .icon {
-            font-size: 1.5rem;
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.5);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .note-box {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #2e7d32;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         footer {
             text-align: center;
-            padding: 15px;
-            color: #888;
+            padding: 18px;
+            color: #999;
             font-size: 0.8rem;
             border-top: 1px solid #eee;
+            background: #fafafa;
         }
     </style>
 <base target="_blank">
@@ -273,166 +215,69 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛡️طلب تصريح امني</h1>
+            <div class="header-icon">🛡️</div>
+            <h1>قسم التصاريح الأمنية</h1>
+            <p>وزارة الشباب والرياضة - جمهورية العراق</p>
         </div>
 
         <div class="content">
-            <div class="warning-box">
+            <div class="alert-box">
                 <span class="icon">⚠️</span>
-                <span><strong>تنبيه مهم:</strong> تسحب الاستمارة وتملأ بخط اليد والالتزام بالتعليمات أدناه</span>
+                <span class="text">
+                    <strong>تنبيه مهم:</strong> تُسحب الاستمارة وتُملأ بخط اليد والالتزام بالتعليمات أدناه
+                </span>
             </div>
 
             <div class="instructions-box">
-                <h2>التعليمات الإلزامية</h2>
+                <h2>📋 التعليمات الإلزامية</h2>
 
                 <div class="instruction-item">
                     <span class="icon">📎</span>
-                    <span class="text"><strong>ترفق جميع المستمسكات:</strong> بطاقة موحدة + بطاقة سكن + بطاقة تموينية + جواز سفر + صور شخصية</span>
+                    <span class="text">
+                        <strong>ترفق جميع المستمسكات:</strong><br>
+                        بطاقة موحدة + بطاقة سكن + بطاقة تموينية + جواز سفر + صور شخصية
+                    </span>
                 </div>
 
                 <div class="instruction-item">
                     <span class="icon">📄</span>
-                    <span class="text"><strong>ترفق جميع الأوامر الإدارية:</strong> ترفيع + نقل + تمديد فصل سياسي + تمديد</span>
+                    <span class="text">
+                        <strong>ترفق جميع الأوامر الإدارية:</strong><br>
+                        ترفيع + نقل + تمديد فصل سياسي + تمديد
+                    </span>
                 </div>
 
                 <div class="instruction-item highlight">
                     <span class="icon">✍️</span>
-                    <span class="text"><strong>تملأ بخط اليد + التوقيع + البصمة</strong> (إلزامي)</span>
+                    <span class="text">
+                        <strong>تُملأ بخط اليد + التوقيع + البصمة</strong><br>
+                        (إلزامي - لا تقبل الاستمارة المكتوبة بالحاسوب)
+                    </span>
                 </div>
             </div>
 
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">📤</div>
-                <h3>اسحب الملف هنا أو انقر للاختيار</h3>
-                <p>PDF فقط - الحد الأقصى 10 ميجابايت</p>
-                <input type="file" id="fileInput" accept=".pdf" />
+            <div class="download-section">
+                <h3>📥 تحميل الاستمارة الفارغة</h3>
+                <p class="sub-text">اضغط الزر أدناه لتحميل الاستمارة بصيغة PDF</p>
+
+                <!-- ✅ رابط التحميل من GitHub - استبدله برابط ملفك -->
+                <a href="https://github.com/user-attachments/files/28842160/default.pdf" 
+                   download 
+                   class="download-btn">
+                    <span>⬇️</span>
+                    <span>تحميل الاستمارة</span>
+                </a>
             </div>
 
-            <div class="file-info" id="fileInfo">
-                <span class="file-icon">📑</span>
-                <div class="file-details">
-                    <div class="file-name" id="fileName"></div>
-                    <div class="file-size" id="fileSize"></div>
-                </div>
-                <button class="remove-btn" id="removeBtn">حذف</button>
-            </div>
-
-            <button class="submit-btn" id="submitBtn" disabled>رفع الملف</button>
-
-            <div class="success-message" id="successMessage">
-                ✅ تم رفع الملف بنجاح! سيتم مراجعته من قبل الإدارة المختصة.
+            <div class="note-box">
+                💡 <strong>ملاحظة:</strong> بعد تحميل الاستمارة وطباعتها وتعبئتها،<br>
+                تُسلم الاستمارة المُعبأة يدوياً إلى قسم التصاريح الأمنية
             </div>
         </div>
 
         <footer>
-            مكتب الوزير - قسم التصاريح الأمنية
+            مكتب الوزير - قسم التصاريح الأمنية © 2025
         </footer>
     </div>
-
-    <script>
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const removeBtn = document.getElementById('removeBtn');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-
-        let selectedFile = null;
-
-        // Click to upload
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFile(e.target.files[0]);
-            }
-        });
-
-        // Drag and drop
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                if (files[0].type === 'application/pdf' || files[0].name.endsWith('.pdf')) {
-                    handleFile(files[0]);
-                } else {
-                    alert('❌ يرجى اختيار ملف PDF فقط!');
-                }
-            }
-        });
-
-        function handleFile(file) {
-            // Validate PDF
-            if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
-                alert('❌ يرجى اختيار ملف PDF فقط!');
-                return;
-            }
-
-            // Validate size (10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                alert('❌ حجم الملف يتجاوز 10 ميجابايت!');
-                return;
-            }
-
-            selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.classList.add('show');
-            submitBtn.disabled = false;
-            successMessage.classList.remove('show');
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 بايت';
-            const k = 1024;
-            const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        removeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectedFile = null;
-            fileInput.value = '';
-            fileInfo.classList.remove('show');
-            submitBtn.disabled = true;
-            successMessage.classList.remove('show');
-        });
-
-        submitBtn.addEventListener('click', () => {
-            if (!selectedFile) return;
-
-            // Simulate upload
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'جاري الرفع... ⏳';
-
-            setTimeout(() => {
-                submitBtn.textContent = 'رفع الملف';
-                submitBtn.disabled = false;
-                successMessage.classList.add('show');
-
-                // Here you would normally send the file to server
-                // const formData = new FormData();
-                // formData.append('file', selectedFile);
-                // fetch('/upload', { method: 'POST', body: formData });
-
-                console.log('File ready for upload:', selectedFile.name);
-            }, 1500);
-        });
-    </script>
 </body>
 </html>
