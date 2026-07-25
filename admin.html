@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | إحصائيات التحميل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #11998e, #38ef7d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #1a5f2a;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .stat-card {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #38ef7d;
+        }
+
+        .stat-card h2 {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #11998e;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #11998e;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .last-update {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            color: #c62828;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #fff;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>📊 إحصائيات الاستمارة</h1>
+            <p>مراقبة مباشرة لعدد مرات تحميل استمارة التصريح الأمني</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>إجمالي التحميلات</h2>
+            <div class="stat-number" id="downloadCount">
+                <div class="spinner" id="loadingSpinner"></div>
+                <span id="countText" style="display: none;">0</span>
+            </div>
+            <div class="last-update" id="lastUpdateText">جاري الاتصال بقاعدة البيانات...</div>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            حدث خطأ في الاتصال بقاعدة البيانات. تأكد من إعدادات Firebase.
+        </div>
+    </div>
+
+    <footer>
+        نظام الإحصائيات الذكي &copy; 2026
+    </footer>
+
+    <!-- Firebase Integration (Realtime Database) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRui_eL_Mt35O3nDu18xStqzY7Q26g5ck",
+            authDomain: "tasreeh-fdf00.firebaseapp.com",
+            databaseURL: "https://tasreeh-fdf00-default-rtdb.firebaseio.com",
+            projectId: "tasreeh-fdf00",
+            storageBucket: "tasreeh-fdf00.firebasestorage.app",
+            messagingSenderId: "244784556891",
+            appId: "1:244784556891:web:582110e2b2fbd28fe1887e",
+            measurementId: "G-PT2T98EP5P"
+        };
+
+        const countText = document.getElementById('countText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const lastUpdateText = document.getElementById('lastUpdateText');
+        const errorMessage = document.getElementById('errorMessage');
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+            
+            // الاستماع المباشر للتغييرات في مسار الإحصائيات
+            const statsRef = ref(db, 'statistics/downloads');
+            
+            onValue(statsRef, (snapshot) => {
+                loadingSpinner.style.display = 'none';
+                countText.style.display = 'inline';
+                errorMessage.style.display = 'none';
+
+                const data = snapshot.val();
+                if (data) {
+                    countText.textContent = data.count || 0;
+                    
+                    if (data.lastDownloadedAt) {
+                        const date = new Date(data.lastDownloadedAt);
+                        lastUpdateText.textContent = 'آخر تحميل: ' + date.toLocaleString('ar-EG');
+                    } else {
+                        lastUpdateText.textContent = 'محدث الآن';
+                    }
+                } else {
+                    countText.textContent = '0';
+                    lastUpdateText.textContent = 'لم يتم أي تحميل بعد';
+                }
+            }, (error) => {
+                console.error("Error fetching data:", error);
+                loadingSpinner.style.display = 'none';
+                errorMessage.style.display = 'block';
+                lastUpdateText.textContent = 'فشل التحديث';
+            });
+
+        } catch (error) {
+            console.error("Firebase init error:", error);
+            loadingSpinner.style.display = 'none';
+            errorMessage.style.display = 'block';
+            lastUpdateText.textContent = 'خطأ في الإعدادات';
+        }
+    </script>
+</body>
+</html>

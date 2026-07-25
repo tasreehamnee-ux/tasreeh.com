@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل استمارة التصريح الأمني</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a5f2a 0%, #0d3b1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+            max-width: 650px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .watermark-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .watermark-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2e8b47 0%, #1a5f2a 100%);
+            color: white;
+            padding: 35px 25px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .content {
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .alert-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-box .icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .alert-box .text {
+            color: #e65100;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .instructions-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .instructions-box h2 {
+            color: #1a5f2a;
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instruction-item {
+            background: white;
+            border-right: 4px solid #2e8b47;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 0 10px 10px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .instruction-item:hover {
+            background: #e8f5e9;
+            transform: translateX(-4px);
+        }
+
+        .instruction-item .icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .instruction-item .text {
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .instruction-item .text strong {
+            color: #1a5f2a;
+        }
+
+        .instruction-item.highlight {
+            border-right-color: #c62828;
+            background: #ffebee;
+        }
+
+        .instruction-item.highlight:hover {
+            background: #ffcdd2;
+        }
+
+        .instruction-item.highlight .text strong {
+            color: #c62828;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196f3;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .download-section h3 {
+            color: #1565c0;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .download-section .sub-text {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            color: white;
+            padding: 16px 45px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.15rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.35);
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.5);
+        }
+
+        .note-box {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #2e7d32;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px;
+            color: #999;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- العلامة المائية -->
+        <div class="watermark-bg">
+            <img src="imag.jpg" alt="شعار وزارة الشباب والرياضة">
+        </div>
+
+        <div class="header">
+            <h1>استمارة تصريح امني </h1>
+        </div>
+
+        <div class="content">
+            <div class="alert-box">
+                <span class="icon">⚠️</span>
+                <span class="text">
+                    <strong>تنبيه مهم:</strong> تُسحب الاستمارة وتُملأ بخط اليد والالتزام بالتعليمات أدناه
+                </span>
+            </div>
+
+            <div class="instructions-box">
+                <h2>📋 التعليمات الإلزامية</h2>
+
+                <div class="instruction-item">
+                    <span class="icon">📎</span>
+                    <span class="text">
+                        <strong>ترفق جميع المستمسكات:</strong><br>
+                        بطاقة موحدة + بطاقة سكن + بطاقة تموينية + جواز سفر + صور شخصية
+                    </span>
+                </div>
+
+                <div class="instruction-item">
+                    <span class="icon">📄</span>
+                    <span class="text">
+                        <strong>ترفق جميع الأوامر الإدارية:</strong><br>
+                        ترفيع + نقل + تمديد فصل سياسي
+                    </span>
+                </div>
+
+                <div class="instruction-item highlight">
+                    <span class="icon">✍️</span>
+                    <span class="text">
+                        <strong>تُملأ بخط اليد + التوقيع + البصمة</strong><br>
+                        (إلزامي - لا تقبل الاستمارة المكتوبة بالحاسوب)
+                    </span>
+                </div>
+            </div>
+
+            <div class="download-section">
+                <h3>📥 تحميل الاستمارة الفارغة</h3>
+                <p class="sub-text">اضغط الزر أدناه لتحميل الاستمارة بصيغة PDF</p>
+
+                <button onclick="downloadPDF()" class="download-btn">
+                    <span>تحميل الاستمارة</span>
+                    <span>⬇️</span>
+                </button>
+            </div>
+
+            <div class="note-box">
+                💡 <strong>ملاحظة:</strong> بعد تحميل الاستمارة وطباعتها وتعبئتها،<br>
+                تُسلم الاستمارة المُعبأة يدوياً إلى قسم التصاريح الأمنية
+            </div>
+        </div>
+
+        <footer>
+            مكتب الوزير - قسم التصاريح الأمنية
+        </footer>
+    </div>
+
+    <script>
+        window.downloadPDF = function() {
+            const link = document.createElement('a');
+            link.href = 'استمارة التصريح الامني.pdf';
+            link.download = 'استمارة التصريح الامني.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            if (typeof window.trackDownload === 'function') {
+                window.trackDownload();
+            }
+        }
+    </script>
+
+    <!-- Firebase Integration (Realtime Database) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRui_eL_Mt35O3nDu18xStqzY7Q26g5ck",
+            authDomain: "tasreeh-fdf00.firebaseapp.com",
+            databaseURL: "https://tasreeh-fdf00-default-rtdb.firebaseio.com",
+            projectId: "tasreeh-fdf00",
+            storageBucket: "tasreeh-fdf00.firebasestorage.app",
+            messagingSenderId: "244784556891",
+            appId: "1:244784556891:web:582110e2b2fbd28fe1887e",
+            measurementId: "G-PT2T98EP5P"
+        };
+
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            console.log("تم تهيئة Firebase Realtime Database بنجاح");
+        } catch (error) {
+            console.error("خطأ في تهيئة Firebase:", error);
+        }
+
+        window.trackDownload = function() {
+            if (!db) return;
+            const statsRef = ref(db, 'statistics/downloads');
+            
+            runTransaction(statsRef, (currentData) => {
+                if (currentData === null) {
+                    return { count: 1, lastDownloadedAt: Date.now() };
+                } else {
+                    return {
+                        count: (currentData.count || 0) + 1,
+                        lastDownloadedAt: Date.now()
+                    };
+                }
+            }).then(() => {
+                console.log("تم تسجيل عملية التحميل بنجاح");
+            }).catch((error) => {
+                console.error("حدث خطأ أثناء تسجيل التحميل:", error);
+            });
+        };
+    </script>
+</body>
+</html>
